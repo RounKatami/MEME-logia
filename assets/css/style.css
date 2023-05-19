@@ -1,0 +1,121 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: #ffb338;
+}
+
+header{
+    width: 100%;
+    background-color: #fcd697;
+    box-shadow: 0px 5px 15px black;
+}
+
+.nav{
+    display: inline-flex;
+    justify-content: space-between;
+    position: relative;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+}
+
+#meme{
+    position: relative;
+    width: 50%;
+    margin:0 auto;
+    background-color: #bd8528;
+}
+
+.mem{
+    width: 400px;
+    height: 500px;
+    margin-left: 25%;
+    margin-top: 20px;
+    border: 3px solid white;
+}
+
+footer{
+    margin:0 auto;
+    background-color: #ffb338;
+    width: 50%;
+}
+
+#youtube{
+    width: 60px;
+    height: 60px;
+    margin-left: 50%;
+}
+
+#avtor{
+    padding: 0;
+    margin:0;
+    border: none;
+    margin-left: 43%;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: #ffb338;
+}
+
+header{
+    width: 100%;
+    background-color: #fcd697;
+    box-shadow: 0px 5px 15px black;
+}
+
+.nav{
+    display: inline-flex;
+    justify-content: space-between;
+    position: relative;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+}
+
+.meme{
+    position: relative;
+    width: 50%;
+    margin:0 auto;
+    background-color: #bd8528;
+}
+
+.mem{
+    width: 400px;
+    height: 500px;
+    margin-left: 25%;
+    margin-top: 20px;
+    border: 3px solid white;
+}
+
+footer{
+    margin:0 auto;
+    background-color: #ffb338;
+    width: 50%;
+}
+
+#youtube{
+    width: 60px;
+    height: 60px;
+    margin-left: 50%;
+}
+
+#avtor{
+    padding: 0;
+    margin:0;
+    border: none;
+    margin-left: 43%;
+}
