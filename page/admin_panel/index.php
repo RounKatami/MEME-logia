@@ -145,6 +145,18 @@ box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 15%);
     flex-wrap: wrap;
     font-weight: 700;
             }
+
+            .bottom{
+                margin-bottom:10px;
+            }
+
+            .bottom1{
+                margin-bottom:20px;
+            }
+
+            .top{
+                margin-top:10px;
+            }
         }
     </style>
     <main>
@@ -164,7 +176,7 @@ if(isset($_POST['submit_hight'])){
 }
 
 if(isset($suffix)){
-    $uploadDir = '../../assets/image/meme';
+    $uploadDir = '../../assets/image/meme/';
     
     $uploadedFile = $_FILES['file']['tmp_name'];
     $fileName = $_FILES['file']['name'];
@@ -190,9 +202,9 @@ if(isset($suffix)){
 }
 ?>
             <form action="" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" />
-                <input type="submit" name="submit_hight" value="Загрузить - высокий мем" />
-                <input type="submit" name="submit_width" value="Загрузить - широкий мем" />
+                <input type="file" name="file" class="bottom top"/>
+                <input type="submit" name="submit_hight" value="Загрузить - высокий мем" class="bottom"/>
+                <input type="submit" name="submit_width" value="Загрузить - широкий мем" class="bottom"/>
             </form>
           </div>
         </div>
@@ -204,6 +216,8 @@ if(isset($_POST['submit_square'])){
     $suffix = '-square';
 } elseif(isset($_POST['submit_width'])){
     $suffix = '-width';
+} elseif(isset($_POST['submit_hight'])){
+    $suffix = '-hight';
 }
 
 if(isset($suffix)){
@@ -233,9 +247,10 @@ if(isset($suffix)){
 }
 ?>
             <form action="" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" />
-                <input type="submit" name="submit_square" value="Загрузить - квадратную аватарку" />
-                <input type="submit" name="submit_width" value="Загрузить - широкую аватарку" />
+                <input type="file" name="file" class="bottom top"/>
+                <input type="submit" name="submit_square" value="Загрузить - квадратную аватарку" class="bottom"/>
+                <input type="submit" name="submit_square" value="Загрузить - высокую аватарку" class="bottom"/>
+                <input type="submit" name="submit_width" value="Загрузить - широкую аватарку" class="bottom"/>
             </form>
           </div>
         </div>
@@ -249,7 +264,7 @@ if(isset($suffix)){
           <div class="accordion__body">
             <form method="POST">
             <label for="photoNumber">Номер мема:</label>
-            <input type="number" name="photoNumber" id="photoNumber">
+            <input type="number" name="photoNumber" id="photoNumber" class="bottom">
             <button type="submit">Удалить мем</button>
         </form>
         <?php
@@ -258,7 +273,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $inputNumber = $_POST['photoNumber'];
 
     // Папка, где хранятся фотографии
-    $photoFolder = '../../assets/image/meme';
+    $photoFolder = '../../assets/image/meme/';
 
     // Получаем список файлов в папке
     $files = scandir($photoFolder);
@@ -296,8 +311,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <div class="accordion__body">
             <form method="POST">
             <label for="photoNumber">Номер аватарки:</label>
-            <input type="number" name="photoNumber" id="photoNumber">
-            <button type="submit">Удалить аватарку</button>
+            <input type="number" name="photoNumber" id="photoNumber"><br>
+            <button type="submit" class="top">Удалить аватарку</button>
         </form>
         <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -305,7 +320,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $inputNumber = $_POST['photoNumber'];
 
     // Папка, где хранятся фотографии
-    $photoFolder = '../../assets/image/avatars';
+    $photoFolder = '../../assets/image/avatars/';
 
     // Получаем список файлов в папке
     $files = scandir($photoFolder);
