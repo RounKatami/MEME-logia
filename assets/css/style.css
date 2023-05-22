@@ -12,6 +12,13 @@ header{
     width: 100%;
     background-color: #fcd697;
     box-shadow: 0px 5px 15px black;
+    padding: 20px 10px;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    font-weight: 700;
 }
 
 .nav{
@@ -43,7 +50,6 @@ a{
 footer{
     margin:0 auto;
     background-color: #ffb338;
-    width: 50%;
 }
 
 #youtube{
@@ -56,7 +62,6 @@ footer{
     padding: 0;
     margin:0;
     border: none;
-    margin-left: 43%;
 }
 
 *{
@@ -73,12 +78,6 @@ header{
     width: 100%;
     background-color: #fcd697;
     box-shadow: 0px 5px 15px black;
-}
-
-.nav{
-    display: inline-flex;
-    justify-content: space-between;
-    position: relative;
 }
 
 a{
