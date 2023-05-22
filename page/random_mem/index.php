@@ -44,10 +44,51 @@
             }
         }
     </style>
-    <header>
-        <div id="nav">
-            <h1 id="main"><a href="../../index.php" class="content"><b>MEME-logia</b></a></h1>
+        <header>
+        <div class="wrap-logo">
+            <h2 class="title"><a href="../../index.php">MEME-logia</a></h2>
         </div>
+        <div class="wrap-logo">
+             <h2 class="title"><a href="#">Рандомный мем</a></h2>
+        </div>
+        <nav>
+            <h2><a href="../../avatars.php">Аватарки</a></h2>
+        </nav>
+        </header>
+        <style>
+            @media screen and (max-width:800px){
+            #meme{
+                width: 100%;
+                background-color: #bd8528;
+            }
+
+            #main, #random{
+                font-size:5px;
+            }
+
+            .centered-image{
+                width:230px;
+                height:350px;
+            }
+
+            h2{
+                font-size:17px;
+            }
+
+            header{
+                width: 100%;
+    background-color: #fcd697;
+    box-shadow: 0px 5px 15px black;
+    padding:10px;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    font-weight: 700;
+            }
+        }
+    </style>
         <style>
         /* CSS для центрирования изображения */
         .centered-image {
@@ -68,12 +109,11 @@
             height:60px;
         }
     </style>
-    </header>
     <main>
         <div id="meme">
             <?php
 // Путь к папке с изображениями
-$dir = '../../assets/image/';
+$dir = '../../assets/image/meme';
 
 // Получаем список файлов в папке
 $files = glob($dir . '/*.*');
