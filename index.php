@@ -39,10 +39,16 @@
 }
     </style>
         <header>
-            <div class="nav">
-                <h2 class="page2"><a href="page/random_mem/index.php">Рандомный_мем</a></h2>
-            </div>
-        </header>
+        <div class="wrap-logo">
+            <h2 class="title"><a href="#">MEME-logia</a></h2>
+        </div>
+        <div class="wrap-logo">
+             <h2 class="title"><a href="page/random_mem/index.php">Рандомный мем</a></h2>
+        </div>
+        <nav>
+            <h2><a href="avatars.php">Аватарки</a></h2>
+        </nav>
+    </header>
         
         <main>
         <style>
@@ -60,14 +66,34 @@
                 width:230px;
                 height:350px;
             }
+
+            h2{
+                font-size:17px;
+            }
+
+            header{
+                width: 100%;
+    background-color: #fcd697;
+    box-shadow: 0px 5px 15px black;
+    padding:10px;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    font-weight: 700;
+            }
         }
     </style>
     <style>
     <?php
-    $folder = 'assets/image/'; // Замените на фактический путь к папке с изображениями
+    $folder = 'assets/image/meme'; // Замените на фактический путь к папке с изображениями
 
-    // Получаем список файлов в папке
+     // Получаем список файлов в папке
     $files = scandir($folder);
+
+    // Создаем массив для хранения размеров изображений
+    $image_sizes = [];
 
     // Перебираем каждый файл
     foreach ($files as $file) {
@@ -75,7 +101,10 @@
 
         // Проверяем, является ли файл изображением
         if (is_file($file_path) && in_array(pathinfo($file_path, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif'])) {
-            // Определяем класс в зависимости от имени файла
+            // Получаем размеры изображения
+            list($width, $height) = getimagesize($file_path);
+
+            // Определяем класс и стили в зависимости от имени файла
             $image_class = '';
             $css_styles = '';
 
@@ -87,10 +116,24 @@
                 $css_styles = 'width: 430px; height: 300px; margin: 0 auto; border: 3px solid white; margin-bottom: 10px;';
             }
 
+            // Добавляем размеры изображения в массив
+            $image_sizes[$file] = $width * $height;
+
             // Выводим CSS стили в зависимости от класса изображения
             echo '.' . $image_class . ' { ' . $css_styles . ' }';
         }
     }
+
+    // Сортируем массив размеров изображений в порядке убывания
+    arsort($image_sizes);
+
+    // Отсортированный массив файлов по первым двум цифрам в названии
+    $sorted_files = [];
+    foreach ($image_sizes as $file => $size) {
+        $sorted_files[$file] = intval(substr($file, 0, 2));
+    }
+    array_multisort($sorted_files, SORT_DESC, $image_sizes);
+
     ?>
 
     @media (max-width: 800px) {
@@ -101,30 +144,22 @@
 </style>
             <div id="meme">
             <?php
-    // Получаем список файлов в папке (если он не был получен ранее)
-    if (!isset($files)) {
-        $files = scandir($folder);
-    }
-
-    // Перебираем каждый файл
-    foreach ($files as $file) {
+    // Перебираем отсортированный массив размеров изображений
+    foreach ($image_sizes as $file => $size) {
         $file_path = $folder . '/' . $file;
 
-        // Проверяем, является ли файл изображением
-        if (is_file($file_path) && in_array(pathinfo($file_path, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif'])) {
-            // Определяем класс в зависимости от имени файла
-            $image_class = '';
-            if (strpos($file, '-hight') !== false) {
-                $image_class = 'image_height';
-            } elseif (strpos($file, '-width') !== false) {
-                $image_class = 'image_width';
-            }
-
-            // Выводим изображение с классом в элементе <div>
-            echo '<div style="text-align: center;">';
-            echo '<img src="' . $file_path . '" alt="' . $file . '" class="' . $image_class . '">';
-            echo '</div>';
+        // Определяем класс в зависимости от имени файла
+        $image_class = '';
+        if (strpos($file, '-hight') !== false) {
+            $image_class = 'image_height';
+        } elseif (strpos($file, '-width') !== false) {
+            $image_class = 'image_width';
         }
+
+        // Выводим изображение с классом в элементе <div>
+        echo '<div style="text-align: center;">';
+        echo '<img src="' . $file_path . '" alt="' . $file . '" class="' . $image_class . '">';
+        echo '</div>';
     }
     ?>
             </div>
@@ -133,7 +168,6 @@
     <footer id="footer">
         <a href="https://www.youtube.com/channel/UCcvGNCtnBaYwSHbAg3ExmSg"><img src="assets/youtube.png" alt="youtube-logo" id="youtube"></a>
         <p id="avtor">Progrmming by: Krenic 2023</p>
-        <a href="test_admin.php">LOLOLLO</a>
     </footer>
 </body>
 </html>
