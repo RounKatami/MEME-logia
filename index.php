@@ -24,6 +24,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="assets/css/style.css" rel="stylesheet" type="text/css">
     <title>MEME-logia</title>
+
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SVQQJ0D1GT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-SVQQJ0D1GT');
+</script>
 </head>
 <body>
     <div class="pod">
@@ -130,7 +140,7 @@
     // Отсортированный массив файлов по первым двум цифрам в названии
     $sorted_files = [];
     foreach ($image_sizes as $file => $size) {
-        $sorted_files[$file] = intval(substr($file, 0, 2));
+        $sorted_files[$file] = intval(substr($file, 0, 4));
     }
     array_multisort($sorted_files, SORT_DESC, $image_sizes);
 
