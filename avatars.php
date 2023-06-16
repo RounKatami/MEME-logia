@@ -23,7 +23,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="assets/css/style.css" rel="stylesheet" type="text/css">
-    <title>Аватарки</title>
+    <title>MEME-logia | Аватарки</title>
 </head>
 <body>
     <div class="pod">
@@ -112,7 +112,7 @@
     </style>
     <style>
     <?php
-    $folder = 'assets/image/avatars'; // Замените на фактический путь к папке с изображениями
+    $folder = 'assets/image/avatars/'; // Замените на фактический путь к папке с изображениями
 
      // Получаем список файлов в папке
     $files = scandir($folder);
@@ -158,7 +158,7 @@
     // Отсортированный массив файлов по первым двум цифрам в названии
     $sorted_files = [];
     foreach ($image_sizes as $file => $size) {
-        $sorted_files[$file] = intval(substr($file, 0, 2));
+        $sorted_files[$file] = intval(substr($file, 0, 4));
     }
     array_multisort($sorted_files, SORT_DESC, $image_sizes);
 
@@ -171,32 +171,42 @@
     }
 </style>
             <div id="meme">
-            <?php
-    // Перебираем отсортированный массив размеров изображений
-    foreach ($image_sizes as $file => $size) {
-        $file_path = $folder . '/' . $file;
+    <?php
+        // Загружаем данные из JSON файла
+        $jsonFile = 'avatars.json';
+        $jsonData = file_get_contents($jsonFile);
+        $existingData = json_decode($jsonData, true);
 
-        // Определяем класс в зависимости от имени файла
-        $image_class = '';
-        if (strpos($file, '-square') !== false) {
-            $image_class = 'image_square';
-        } elseif (strpos($file, '-width') !== false) {
-            $image_class = 'image_width';
+        // Перебираем данные
+        foreach ($existingData as $data) {
+            $photo = $data['photo'];
+            $tags = $data['tags'];
+
+            // Выводим фотографию
+            echo '<div style="text-align: center;">';
+            echo '<img src="' . $photo . '" alt="Аватарка" class="image" style="width: 350px; height: 350px; border: 3px solid white;">';
+            echo '</div>';
+
+            // Выводим теги и задаем блоку и тегам ширину только по ширине фото с возможностью переноса на новую строку
+            echo '<div style="text-align: center;">';
+            echo '<div class="tegs" style="display: inline-block; background-color: black; backdrop-filter: blur(2px); max-width: 350px; word-wrap: break-word; margin-bottom: 10px;">';
+            foreach ($tags as $tag) {
+                $tagFileName = $tag . '.php';
+                $tagLink = 'page/tags_avatars/' . $tagFileName;
+                echo '<a href="' . $tagLink . '" style="color: white; padding: 5px 10px; margin-right: 5px; display: inline-block;">';
+                echo '<span style="color:#00d5e0;">#</span>' . $tag;
+                echo '</a>';
+            }
+            echo '</div>';
+            echo '</div>';
         }
-
-        // Выводим изображение с классом в элементе <div>
-        echo '<div style="text-align: center;">';
-        echo '<img src="' . $file_path . '" alt="' . $file . '" class="' . $image_class . '">';
-        echo '</div>';
-    }
-    ?>
-            </div>
+        ?>
+</div>
         </main>
     </div>
     <footer id="footer">
         <a href="https://www.youtube.com/channel/UCcvGNCtnBaYwSHbAg3ExmSg"><img src="assets/youtube.png" alt="youtube-logo" id="youtube"></a>
         <p id="avtor">Progrmming by: Krenic 2023</p>
-        <a href="avatars.php">LOLOLLO</a>
     </footer>
 </body>
 </html>
