@@ -23,7 +23,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../../assets/css/style.css?random_string" rel="stylesheet" type="text/css">
-    <title>Админ панель</title>
+    <title>MEME-logia | Админ панель</title>
 </head>
 <body>
 <style>
@@ -111,7 +111,6 @@ box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 15%);
             <h2><a href="../../avatars.php">Аватарки</a></h2>
         </nav>
     </header>
-        
         <main>
         <style>
             @media screen and (max-width:800px){
@@ -169,91 +168,198 @@ box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 15%);
           <div class="accordion__header">Meme</div>
           <div class="accordion__body">
             <?php
-if(isset($_POST['submit_hight'])){
+if (isset($_POST['submit_hight'])) {
     $suffix = '-hight';
-} elseif(isset($_POST['submit_width'])){
+} elseif (isset($_POST['submit_width'])) {
     $suffix = '-width';
 }
 
-if(isset($suffix)){
+if (isset($suffix) && isset($_FILES['file'])) {
     $uploadDir = '../../assets/image/meme/';
-    
+
+    // Получаем список файлов в указанной папке
+    $files = glob($uploadDir . '*.*');
+
+    // Находим наибольшее число в имени файла
+    $maxNumber = 0;
+    foreach ($files as $file) {
+        $fileName = basename($file);
+        $fileParts = pathinfo($fileName);
+        $number = (int) $fileParts['filename'];
+        if ($number > $maxNumber) {
+            $maxNumber = $number;
+        }
+    }
+
+    $newNumber = $maxNumber + 1;
+    $paddedNumber = sprintf('%04d', $newNumber);
+
     $uploadedFile = $_FILES['file']['tmp_name'];
     $fileName = $_FILES['file']['name'];
     $fileParts = pathinfo($fileName);
-    
-    $newFileName = $fileParts['filename'] . $suffix . '.' . $fileParts['extension'];
+
+    $newFileName = $paddedNumber . $suffix . '.' . $fileParts['extension'];
     $targetPath = $uploadDir . $newFileName;
-    
+
     // Проверяем, является ли загруженный файл изображением
     $imageFileType = strtolower(pathinfo($targetPath, PATHINFO_EXTENSION));
     $allowedExtensions = array('jpg', 'jpeg', 'png', 'gif', 'webp');
-    
-    if(in_array($imageFileType, $allowedExtensions)){
+
+    if (in_array($imageFileType, $allowedExtensions)) {
         // Перемещаем загруженный файл в указанную папку
-        if(move_uploaded_file($uploadedFile, $targetPath)){
-            echo 'Файл успешно загружен.';
+        if (move_uploaded_file($uploadedFile, $targetPath)) {
+            echo 'Файл успешно загружен: ' . $newFileName . '<br>';
         } else {
-            echo 'Ошибка при загрузке файла.';
+            echo 'Ошибка при загрузке файла: ' . $fileName . '<br>';
         }
     } else {
         echo 'Допустимы только изображения в форматах JPG, JPEG, PNG, GIF и WEBP.';
     }
 }
 ?>
-            <form action="" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" class="bottom top"/>
-                <input type="submit" name="submit_hight" value="Загрузить - высокий мем" class="bottom"/>
-                <input type="submit" name="submit_width" value="Загрузить - широкий мем" class="bottom"/>
-            </form>
+
+<form action="" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" class="bottom top">
+    <input type="submit" name="submit_hight" value="Загрузить - высокий мем" class="bottom">
+    <input type="submit" name="submit_width" value="Загрузить - широкий мем" class="bottom">
+</form>
           </div>
         </div>
         <div class="accordion__item">
-          <div class="accordion__header">Avatars</div>
-          <div class="accordion__body">
-            <?php
-if(isset($_POST['submit_square'])){
-    $suffix = '-square';
-} elseif(isset($_POST['submit_width'])){
-    $suffix = '-width';
-} elseif(isset($_POST['submit_hight'])){
-    $suffix = '-hight';
-}
+            <div class="accordion__header">Avatars</div>
+<div class="accordion__body">
+    <?php
+    // Перед началом кода
+    ini_set('display_errors', 0);
+    ini_set('log_errors', 1);
+    ini_set('error_log', 'admin.log');
 
-if(isset($suffix)){
-    $uploadDir = '../../assets/image/avatars/';
-    
-    $uploadedFile = $_FILES['file']['tmp_name'];
-    $fileName = $_FILES['file']['name'];
-    $fileParts = pathinfo($fileName);
-    
-    $newFileName = $fileParts['filename'] . $suffix . '.' . $fileParts['extension'];
-    $targetPath = $uploadDir . $newFileName;
-    
-    // Проверяем, является ли загруженный файл изображением
-    $imageFileType = strtolower(pathinfo($targetPath, PATHINFO_EXTENSION));
-    $allowedExtensions = array('jpg', 'jpeg', 'png', 'gif', 'webp');
-    
-    if(in_array($imageFileType, $allowedExtensions)){
-        // Перемещаем загруженный файл в указанную папку
-        if(move_uploaded_file($uploadedFile, $targetPath)){
-            echo 'Файл успешно загружен.';
-        } else {
-            echo 'Ошибка при загрузке файла.';
+    // В случае возникновения ошибки
+    error_log('Ошибка: Не удалось записать данные в файл JSON.');
+
+    if (isset($_POST['submit'])) {
+        $suffix = '';
+        if (isset($_POST['tags'])) {
+            $tags = $_POST['tags'];
+            // Обработка выбранных тегов
+            $selectedTags = [];
+            if (in_array('Для девушек', $tags)) {
+                $selectedTags[] = 'Girls';
+            }
+            if (in_array('Для парней', $tags)) {
+                $selectedTags[] = 'Boys';
+            }
+            if (in_array('Игры', $tags)) {
+                $selectedTags[] = 'Games';
+            }
+            if (in_array('Аниме', $tags)) {
+                $selectedTags[] = 'Anime';
+            }
+            if (in_array('Ахэгао', $tags)) {
+                $selectedTags[] = 'Ahegao';
+            }
+            if (in_array('Хентай', $tags)) {
+                $selectedTags[] = 'Hentai';
+            }
+            if (in_array('Арты', $tags)) {
+                $selectedTags[] = 'Art';
+            }
+            if (in_array('GIF', $tags)) {
+                $selectedTags[] = 'Gif';
+            }
+
+            $uploadDir = '../../assets/image/avatars/';
+
+            $uploadedFile = $_FILES['file']['tmp_name'];
+            $fileName = $_FILES['file']['name'];
+            $fileParts = pathinfo($fileName);
+
+            $extension = $fileParts['extension'];
+
+            // Загружаем существующие данные из JSON файла
+            $jsonFile = '../../avatars.json';
+            $jsonData = file_get_contents($jsonFile);
+            $existingData = json_decode($jsonData, true);
+
+            // Ищем самый большой номер фотографии в имеющихся данных
+            $lastPhotoNumber = 0;
+            foreach ($existingData as $data) {
+                $photoNumber = $data['number'];
+                if ($photoNumber > $lastPhotoNumber) {
+                    $lastPhotoNumber = $photoNumber;
+                }
+            }
+
+            // Увеличиваем номер последней фотографии
+            $photoNumber = $lastPhotoNumber + 1;
+
+            $targetFileName = sprintf('%04d', $photoNumber) . '-square.' . $extension;
+            $targetPath = $uploadDir . $targetFileName;
+
+            // Проверяем, является ли загруженный файл изображением
+            $imageFileType = strtolower(pathinfo($targetPath, PATHINFO_EXTENSION));
+            $allowedExtensions = array('jpg', 'jpeg', 'png', 'gif', 'webp');
+
+            if (in_array($imageFileType, $allowedExtensions)) {
+                // Перемещаем загруженный файл в указанную папку
+                if (move_uploaded_file($uploadedFile, $targetPath)) {
+
+                    // Создаем новую запись для текущей фотографии
+                    $newData = array(
+                        'photo' => str_replace($_SERVER['DOCUMENT_ROOT'], '', realpath($targetPath)),
+                        'tags' => array(),
+                        'number' => $photoNumber
+                    );
+
+                    // Добавляем пути к php файлам вместо тегов
+                    foreach ($selectedTags as $tag) {
+                        $newData['tags'][] = $tag;
+                    }
+
+                    // Добавляем новую запись в существующие данные
+                    $existingData[] = $newData;
+
+                    // Кодируем данные в формат JSON
+                    $updatedJsonData = json_encode($existingData, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+
+                    // Записываем обновленные данные в JSON файл
+                    file_put_contents($jsonFile, $updatedJsonData);
+
+                    // Файл успешно загружен и изменения в JSON файле произведены
+                    echo 'Файл успешно загружен и изменения в JSON файле. Номер фотографии: ' . $photoNumber . '<br>';
+
+                    // Создаем ссылку на страницу с тегами
+                    $tagLinks = array();
+                    foreach ($selectedTags as $tag) {
+                        $tagLinks[] = '<a href="page/tags/' . $tag . '.php">' . $tag . '</a> (фото #' . $photoNumber . ')';
+                    }
+
+                    // Выводим ссылки на страницы с тегами
+                    echo 'Ссылки на страницы с тегами: ' . implode(', ', $tagLinks);
+                } else {
+                    echo 'Ошибка при загрузке файла.';
+                }
+            } else {
+                echo 'Допустимы только изображения в форматах JPG, JPEG, PNG, GIF и WEBP.';
+            }
         }
-    } else {
-        echo 'Допустимы только изображения в форматах JPG, JPEG, PNG, GIF и WEBP.';
     }
-}
 ?>
-            <form action="" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" class="bottom top"/>
-                <input type="submit" name="submit_square" value="Загрузить - квадратную аватарку" class="bottom"/>
-                <input type="submit" name="submit_square" value="Загрузить - высокую аватарку" class="bottom"/>
-                <input type="submit" name="submit_width" value="Загрузить - широкую аватарку" class="bottom"/>
-            </form>
-          </div>
-        </div>
+    <form action="" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" />
+        <h3>Теги:</h3>
+        <input type="checkbox" name="tags[]" value="Для девушек" /> Для девушек<br>
+        <input type="checkbox" name="tags[]" value="Для парней" /> Для парней<br>
+        <input type="checkbox" name="tags[]" value="Игры" /> Игры<br>
+        <input type="checkbox" name="tags[]" value="Аниме" /> Аниме<br>
+        <input type="checkbox" name="tags[]" value="Ахэгао" /> Ахэгао<br>
+        <input type="checkbox" name="tags[]" value="Хентай" /> Хентай<br>
+        <input type="checkbox" name="tags[]" value="Арты" /> Арты<br>
+        <input type="checkbox" name="tags[]" value="GIF" /> GIF<br>
+        <input type="submit" name="submit" value="Загрузить - квадратную аватарку" />
+    </form>
+</div>
+</div>
       </div>
     </div>
     <div class="accordion__item delete">
@@ -262,12 +368,12 @@ if(isset($suffix)){
         <div class="accordion__item">
           <div class="accordion__header">Meme</div>
           <div class="accordion__body">
-            <form method="POST">
+        <form method="POST">
             <label for="photoNumber">Номер мема:</label>
-            <input type="number" name="photoNumber" id="photoNumber" class="bottom">
+            <input type="input" name="photoNumber" id="photoNumber" class="bottom">
             <button type="submit">Удалить мем</button>
         </form>
-        <?php
+<?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Получаем номер фотографии из поля input
     $inputNumber = $_POST['photoNumber'];
@@ -287,12 +393,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $filename = preg_replace('/-(?:hight|width)$/', '', $filename);
 
             // Получаем первые две цифры в названии файла
-            $number = substr($filename, 0, 2);
+            $number = substr($filename, 0, 4);
 
             // Сравниваем номер с введенным пользователем числом
             if ($number === $inputNumber) {
                 // Удаляем файл
                 if (unlink($photoFolder . $file)) {
+                    // Удаляем данные о файле из хэша браузера
+                    $cacheBusterUrl = '/assets/image/meme/' . $file . '?t=' . time();
+                    echo "<script>if(window.localStorage){localStorage.setItem('cacheBusterUrl', '$cacheBusterUrl');}</script>";
                     echo 'Фотография успешно удалена.';
                 } else {
                     echo 'Ошибка при удалении фотографии.';
@@ -309,11 +418,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="accordion__item">
           <div class="accordion__header">Avatars</div>
           <div class="accordion__body">
-            <form method="POST">
-            <label for="photoNumber">Номер аватарки:</label>
-            <input type="number" name="photoNumber" id="photoNumber"><br>
-            <button type="submit" class="top">Удалить аватарку</button>
-        </form>
         <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Получаем номер фотографии из поля input
@@ -324,6 +428,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Получаем список файлов в папке
     $files = scandir($photoFolder);
+
+    // Определяем последний используемый номер фотографии
+    $lastNumber = 0;
+    foreach ($files as $file) {
+        if (is_file($photoFolder . $file)) {
+            $filename = pathinfo($file, PATHINFO_FILENAME);
+
+            // Игнорируем окончание в виде "-hight" или "-width"
+            $filename = preg_replace('/-(?:square|width)$/', '', $filename);
+
+            // Получаем первые четыре цифры в названии файла
+            $number = intval(substr($filename, 0, 4));
+
+            // Обновляем значение последнего номера, если найденный номер больше текущего значения
+            if ($number > $lastNumber) {
+                $lastNumber = $number;
+            }
+        }
+    }
+
+    // Генерируем новый номер фотографии
+    $newNumber = str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
 
     // Ищем файл, соответствующий номеру фотографии
     foreach ($files as $file) {
@@ -338,11 +464,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Сравниваем номер с введенным пользователем числом
             if ($number === $inputNumber) {
-                // Удаляем файл
-                if (unlink($photoFolder . $file)) {
-                    echo 'Фотография успешно удалена.';
+                // Удаляем файл из хэша браузера
+                $fileUrl = $photoFolder . $file;
+                echo "<script>URL.revokeObjectURL('$fileUrl');</script>";
+
+                // Генерируем новое имя файла с новым номером
+                $newFilename = $newNumber . substr($filename, 2);
+
+                // Переименовываем файл с новым именем
+                if (rename($photoFolder . $file, $photoFolder . $newFilename)) {
+                    echo 'Фотография успешно переименована и удалена.';
                 } else {
-                    echo 'Ошибка при удалении фотографии.';
+                    echo 'Ошибка при переименовании фотографии.';
                 }
 
                 break; // Прерываем цикл после удаления первого найденного файла
@@ -351,6 +484,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+<form method="POST">
+    <label for="photoNumber">Номер аватарки:</label>
+    <input type="input" name="photoNumber" id="photoNumber"><br>
+    <button type="submit" class="top">Удалить аватарку</button>
+</form>
           </div>
         </div>
       </div>
